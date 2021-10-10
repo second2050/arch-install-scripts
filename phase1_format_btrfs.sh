@@ -38,6 +38,7 @@ echo "INFO: Creating subvolume layout..."
 mount $_partition /mnt
 cd /mnt
 btrfs subvolume create @
+btrfs subvolume set-default @
 btrfs subvolume create @home
 btrfs subvolume create @var
 
