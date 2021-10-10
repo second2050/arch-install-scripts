@@ -11,6 +11,7 @@ systemctl enable sddm.service
 
 # set breeze theme in sddm
 echo "INFO: Setting Theme of SDDM..."
+mkdir -p /etc/sddm.conf.d
 cat <<EOF > /etc/sddm.conf.d/kde_settings.conf
 [Theme]
 Current=breeze
