@@ -2,7 +2,7 @@
 # second2050 arch install script - base install script
 
 # variables
-_basepkgs="base base-devel vim man-db linux-firmware networkmanager iwd"
+_basepkgs="base base-devel vim man-db linux-firmware networkmanager iwd sudo"
 _kernelpkgs="linux linux-headers"
 _fontpkgs="noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-cascadia-code"
 

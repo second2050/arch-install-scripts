@@ -87,6 +87,14 @@ useradd -m -G wheel -s /bin/bash $_username
 echo "Enter $_username's password."
 passwd $_username
 
+# setup sudo
+mkdir -p /etc/sudoers.d
+cat <<EOF >> /etc/sudoers.d/second2050.conf
+# second2050's defaults
+%wheel ALL=(ALL) ALL
+Defaults pwfeedback
+EOF
+
 # finish
 echo "Script is finished!"
 echo "INFO: Don't forget to install a bootloader/-manager."
