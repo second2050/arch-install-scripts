@@ -89,7 +89,7 @@ passwd $_username
 
 # setup sudo
 mkdir -p /etc/sudoers.d
-cat <<EOF >> /etc/sudoers.d/second2050.conf
+cat <<EOF >> /etc/sudoers.d/second2050
 # second2050's defaults
 %wheel ALL=(ALL) ALL
 Defaults pwfeedback
