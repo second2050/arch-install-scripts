@@ -85,7 +85,7 @@ echo "INFO: Creating user account..."
 read -e -p "username?: " -i "second2050" _username
 useradd -m -G wheel -s /bin/bash $_username
 echo "Enter $_username's password."
-passwd second2050
+passwd $_username
 
 # finish
 echo "Script is finished!"
