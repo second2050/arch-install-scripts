@@ -33,7 +33,7 @@ echo "KEYMAP=de-latin1" >> /etc/vconsole.conf
 
 # set hostname
 echo "INFO: Setting hostname..."
-read -p "hostname? [second2050]: "
+read -p "hostname? [second2050]: " _hostname
 _hostname=${parameter:-second2050}
 echo $_hostname > /etc/hostname
 { 
@@ -50,6 +50,12 @@ mkinitcpio -P
 echo "INFO: Setting root password..."
 echo "Enter the root password."
 passwd
+
+# create user account
+echo "INFO: Creating user account..."
+read -p "username? [second2050]: " _username
+_username=${parameter:-second2050}
+useradd -m -G wheel -s /bin/bash $_username
 
 # finish
 echo "Script is finished!"
