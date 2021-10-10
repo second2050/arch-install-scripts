@@ -26,6 +26,7 @@ sed -i '177s/.//' /etc/locale.gen # en_US.UTF-8 UTF-8
     echo "LC_MEASUREMENT=de_DE.UTF-8"
     echo "LC_IDENTIFICATION=de_DE.UTF-8"
 } > /etc/locale.conf
+locale-gen
 
 # set keyboard layout for vconsole
 echo "INFO: Setting keyboard layout for vconsole..."
