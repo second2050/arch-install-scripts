@@ -17,5 +17,14 @@ _uuid=$(lsblk -no UUID $(df -P / | awk 'END{print $1}'))
     echo "\"Boot to terminal\"             \"root=UUID=$_uuid rw initrd=boot\initramfs-%v.img loglevel=3 rd.udev.log_priority=3 systemd.unit=multi-user.target\""
 } > /boot/refind_linux.conf
 
+# setup refind.conf
+mv /efi/EFI/refind/refind.conf /efi/EFI/refind/refind.conf.old
+cat <<EOF > /efi/EFI/refind/refind.conf
+# second2050'S refind config (minified)
+timeout 5
+extra_kernel_version_strings linux-xanmod,linux-zen,linux-lts,linux
+write_systemd_vars true
+EOF
+
 # finish
 echo "Script is finished!"
