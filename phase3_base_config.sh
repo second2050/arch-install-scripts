@@ -43,6 +43,34 @@ echo $_hostname > /etc/hostname
     echo "127.0.1.1    $_hostname"
 } >> /etc/hosts
 
+# setup network
+echo "INFO: Setting up Network..."
+systemctl enable NetworkManager
+systemctl enable iwd
+systemctl enable systemd-resolved
+ln -sf /run/systemd/resolve/stub-resolv.conf/etc/resolv.conf
+# write NetworkManager config
+mkdir -p /etc/NetworkManager/conf.d
+cat <<EOF > /etc/NetworkManager/conf.d/wifi_backend.conf
+[device]
+wifi.backend=iwd
+EOF
+cat <<EOF > /etc/NetworkManager/conf.d/mdns.conf
+[connection]
+connection.mdns=2 # enable mdns resolution and registering/broadcasting
+EOF
+# write resolved config
+cat <<EOF >> /etc/systemd/resolved.conf
+
+# second2050's resolved conf
+DNS=1.1.1.1
+FallbackDNS=1.0.0.1 9.9.9.9 9.9.9.10 8.8.8.8 2606:4700:4700::1111 2620:fe::10 2001:4860:4860::8888
+DNSSEC=yes
+DNSOverTLS=yes
+MulticastDNS=yes
+Cache=yes
+EOF
+
 # recreate initramfs
 echo "INFO: Recreating initramfs..."
 mkinitcpio -P
