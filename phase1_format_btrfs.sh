@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 # second2050 arch install script - formatting script for btrfs
 
+# variables
+_oldwd=$(pwd)
+_partition=$1
+
 # check args
-if [[ $1 == "" ]]; then
+if [[ $_partition == "" ]]; then
 	echo "ERROR: no partition given."
 	echo "try: $0 /dev/nvme0n1p6"
 	exit
-elif [ -f $1 ];then
+elif [ -f "$_partition" ]; then
 	echo "ERROR: device doesn't exist."
 	exit
 fi
-
-# variables
-_oldwd = $(pwd)
-_partition = $1
 
 # ask user if that is what they want
 echo "THIS WILL FORMAT YOUR CHOSEN PARTITION"
@@ -31,7 +31,7 @@ fi
 
 # commence the great purge
 echo "INFO: Formatting..."
-mkfs.btrfs $_partition
+mkfs.btrfs $_partition -f
 
 # mount and create subvolumes
 echo "INFO: Creating subvolume layout..."
@@ -50,10 +50,10 @@ mkdir -p ./@/mnt/btrfs-root
 echo "INFO: Remounting to /mnt"
 cd $_oldwd
 umount /mnt
-mount -o rw,relatime,subvol=@ /mnt
-mount -o rw,relatime,compress=zstd,subvol=@home /mnt/home
-mount -o rw,relatime,subvol=@var /mnt/var
-mount -o rw,relatime,subvolid=5 /mnt/mnt/btrfs-root
+mount -o rw,relatime,subvol=@ $_partition /mnt
+mount -o rw,relatime,compress=zstd,subvol=@home $_partition /mnt/home
+mount -o rw,relatime,subvol=@var $_partition /mnt/var
+mount -o rw,relatime,subvolid=5 $_partition /mnt/mnt/btrfs-root
 
 # finish
 echo "Script is finished!"
