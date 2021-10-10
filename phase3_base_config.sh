@@ -29,12 +29,12 @@ sed -i '177s/.//' /etc/locale.gen # en_US.UTF-8 UTF-8
 
 # set keyboard layout for vconsole
 echo "INFO: Setting keyboard layout for vconsole..."
-echo "KEYMAP=de-latin1" >> /etc/vconsole.conf
+read -e -p "keyboard layout?: " -i "de-latin1" _keymap
+echo "KEYMAP=$_keymap" >> /etc/vconsole.conf
 
 # set hostname
 echo "INFO: Setting hostname..."
-read -p "hostname? [second2050]: " _hostname
-_hostname=${parameter:-second2050}
+read -e -p "hostname?: " -i "second2050" _hostname
 echo $_hostname > /etc/hostname
 { 
     echo "127.0.0.1    localhost"
@@ -53,9 +53,10 @@ passwd
 
 # create user account
 echo "INFO: Creating user account..."
-read -p "username? [second2050]: " _username
-_username=${parameter:-second2050}
+read -e -p "username?: " -i "second2050" _username
 useradd -m -G wheel -s /bin/bash $_username
+echo "Enter $_username's password."
+passwd second2050
 
 # finish
 echo "Script is finished!"
