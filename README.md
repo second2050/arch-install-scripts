@@ -15,8 +15,6 @@ Phase 3: System configuration
 Phase 4: Desktop Environments  
 
 # ToDo:
-- Phase 3
-  - Bootmanager/-loader scripts
 - Phase 4
   - Xmonad
   - i3-gaps
