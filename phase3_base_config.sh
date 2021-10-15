@@ -3,7 +3,8 @@
 
 # set timezone
 echo "INFO: Setting Timezone..."
-ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+read -e -p "timezone?: " -i "Europe/Berlin" _timezone
+ln -sf "/usr/share/zoneinfo/$_timezone" /etc/localtime
 hwclock --systohc
 
 # set locale
@@ -15,19 +16,19 @@ sed -i "/$_localelanguage.UTF-8/s/^#//g" /etc/locale.gen # de_DE.UTF-8 UTF-8 # t
 sed -i "/$_localetime.UTF-8/s/^#//g" /etc/locale.gen # en_GB.UTF-8 UTF-8
 sed -i "/$_localeother.UTF-8/s/^#//g" /etc/locale.gen # en_US.UTF-8 UTF-8
 { 
-    echo "LANG=en_US.UTF-8"
-    echo "LC_CTYPE=en_US.UTF-8"
-    echo "LC_NUMERIC=de_DE.UTF-8"
-    echo "LC_TIME=en_GB.UTF-8"
-    echo "LC_COLLATE=en_US.UTF-8"
-    echo "LC_MONETARY=de_DE.UTF-8"
-    echo "LC_MESSAGES=en_US.UTF-8"
-    echo "LC_PAPER=de_DE.UTF-8"
-    echo "LC_NAME=de_DE.UTF-8"
-    echo "LC_ADDRESS=de_DE.UTF-8"
-    echo "LC_TELEPHONE=de_DE.UTF-8"
-    echo "LC_MEASUREMENT=de_DE.UTF-8"
-    echo "LC_IDENTIFICATION=de_DE.UTF-8"
+    echo "LANG=$_localelanguage.UTF-8"
+    echo "LC_CTYPE=$_localelanguage.UTF-8"
+    echo "LC_NUMERIC=$_localeother.UTF-8"
+    echo "LC_TIME=$_localetime.UTF-8"
+    echo "LC_COLLATE=$_localelanguage.UTF-8"
+    echo "LC_MONETARY=$_localeother.UTF-8"
+    echo "LC_MESSAGES=$_localelanguage.UTF-8"
+    echo "LC_PAPER=$_localeother.UTF-8"
+    echo "LC_NAME=$_localeother.UTF-8"
+    echo "LC_ADDRESS=$_localeother.UTF-8"
+    echo "LC_TELEPHONE=$_localeother.UTF-8"
+    echo "LC_MEASUREMENT=$_localeother.UTF-8"
+    echo "LC_IDENTIFICATION=$_localeother.UTF-8"
 } > /etc/locale.conf
 locale-gen
 
