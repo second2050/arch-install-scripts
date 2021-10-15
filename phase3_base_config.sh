@@ -75,6 +75,11 @@ MulticastDNS=yes
 Cache=yes
 EOF
 
+# configurating pacman
+echo "INFO: Configurating pacman..."
+sed -i "/Color/s/^#//g" /etc/pacman.conf
+sed -i "/ParallelDownloads/s/^#//g" /etc/pacman.conf
+
 # recreate initramfs
 echo "INFO: Recreating initramfs..."
 mkinitcpio -P
