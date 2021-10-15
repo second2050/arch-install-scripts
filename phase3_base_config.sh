@@ -48,7 +48,7 @@ echo "INFO: Setting up Network..."
 systemctl enable NetworkManager
 systemctl enable iwd
 systemctl enable systemd-resolved
-ln -sf /run/systemd/resolve/stub-resolv.conf/etc/resolv.conf
+ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 # write NetworkManager config
 mkdir -p /etc/NetworkManager/conf.d
 cat <<EOF > /etc/NetworkManager/conf.d/wifi_backend.conf
