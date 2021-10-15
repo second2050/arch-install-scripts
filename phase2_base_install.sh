@@ -15,6 +15,9 @@ if [[ $_pacstrapexit != 0 ]]; then
     exit $_pacstrapexit
 fi
 
+# remove /etc/resolv.conf in new root because I can't seem to symlink systemd-resolved's stub correctly otherwise...
+rm /mnt/etc/resolv.conf
+
 # generate fstab
 echo "INFO: Generating fstab"
 genfstab -U /mnt >> /mnt/etc/fstab
