@@ -7,10 +7,13 @@ ln -sf /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 hwclock --systohc
 
 # set locale
-echo "INFO: Setting locale"
-sed -i '133s/.//' /etc/locale.gen # de_DE.UTF-8 UTF-8 # this uncomments the 133rd line
-sed -i '160s/.//' /etc/locale.gen # en_GB.UTF-8 UTF-8
-sed -i '177s/.//' /etc/locale.gen # en_US.UTF-8 UTF-8
+echo "INFO: Setting locale..."
+read -e -p "language?: " -i "en_US" _localelanguage
+read -e -p "time locale?: " -i "en_GB" _localetime
+read -e -p "other formats?: " -i "de_DE" _localeother
+sed -i "/$_localelanguage.UTF-8/s/^#//g" /etc/locale.gen # de_DE.UTF-8 UTF-8 # this uncomments the 133rd line
+sed -i "/$_localetime.UTF-8/s/^#//g" /etc/locale.gen # en_GB.UTF-8 UTF-8
+sed -i "/$_localeother.UTF-8/s/^#//g" /etc/locale.gen # en_US.UTF-8 UTF-8
 { 
     echo "LANG=en_US.UTF-8"
     echo "LC_CTYPE=en_US.UTF-8"
