@@ -15,7 +15,8 @@ else
     	exit
     fi
     bash phase2_base_install.sh
-    cp . /mnt/root/arch_install_scripts
+    mkdir -p /mnt/root/arch_install_scripts
+    cp -r . /mnt/root/arch_install_scripts
     arch-chroot /mnt /root/arch_install_scripts/setup_second2050.sh phase3
 fi;
 
