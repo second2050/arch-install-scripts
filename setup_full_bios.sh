@@ -10,8 +10,13 @@ else
     echo "THIS WILL RUN ALL SCRIPTS BACK-TO-BACK!"
     echo ""
     echo "Chosen Setup: BIOS (with grub)"
+    read -t 10 -p "[YES/no]: " _doit
+    if [[ $_doit != "YES" ]]; then
+    	echo "User aborted."
+    	exit
+    fi
     bash phase2_base_install.sh
     cp . /mnt/root/arch_install_scripts
-    arch-chroot /mnt /mnt/root/arch_install_scripts/setup_second2050.sh phase3
+    arch-chroot /mnt /root/arch_install_scripts/setup_second2050.sh phase3
 fi;
 
