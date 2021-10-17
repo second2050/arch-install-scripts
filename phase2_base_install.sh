@@ -8,7 +8,7 @@ _fontpkgs="noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-casca
 
 # install arch base
 echo "INFO: Installing arch base..."
-pacstrap /mnt $_basepkgs $_kernelpkgs $_fontpkgs $*
+pacstrap /mnt "$_basepkgs" "$_kernelpkgs" "$_fontpkgs" "$*"
 _pacstrapexit=$?
 if [[ $_pacstrapexit != 0 ]]; then
     echo "ERROR: pacstrap exitcode: $_pacstrapexit"
