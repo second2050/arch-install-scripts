@@ -17,6 +17,6 @@ else
     bash phase2_base_install.sh
     mkdir -p /mnt/root/arch_install_scripts
     cp -r . /mnt/root/arch_install_scripts
-    arch-chroot /mnt /root/arch_install_scripts/setup_second2050.sh phase3
+    arch-chroot /mnt /root/arch_install_scripts/"$0" phase3
 fi;
 
