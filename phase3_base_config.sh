@@ -95,6 +95,15 @@ read -e -p "username?: " -i "second2050" _username
 useradd -m -G wheel -s /bin/bash $_username
 echo "Enter $_username's password."
 passwd $_username
+cat <<EOF > /home/$_username/.bashrc
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# Execute fish if not run from fish itself
+if [ $(ps -p $PPID -o comm=) != "fish" ]; then
+    exec fish
+fi
+EOF
 
 # setup sudo
 mkdir -p /etc/sudoers.d
