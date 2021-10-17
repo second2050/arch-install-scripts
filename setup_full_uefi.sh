@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # second2050 arch install script - FULL execution (Phase 2 and later) without desktop environment
 if [[ $1 == "phase3" ]]; then
-    ./phase3_base_config.sh
-    ./phase3_bootmgr_refind.sh
+    /root/arch_install_scripts/phase3_base_config.sh
+    /root/arch_install_scripts/phase3_bootmgr_refind.sh
     exit
 else
     echo "THIS WILL START THE INSTALLATION OF ARCH"
