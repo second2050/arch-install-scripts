@@ -3,7 +3,3 @@
 
 # install packages
 pacman -S --noconfirm nvidia-dkms
-
-# finish
-echo "Script is finished!"
-echo "INFO: To enable DRM KMS add \'nvidia-drm.modeset=1\' to your kernel parameters."

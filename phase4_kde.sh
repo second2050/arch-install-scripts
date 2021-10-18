@@ -17,6 +17,3 @@ cat <<EOF > /etc/sddm.conf.d/kde_settings.conf
 Current=breeze
 CursorTheme=breeze_cursors
 EOF
-
-# finish
-echo "Script is finished!"

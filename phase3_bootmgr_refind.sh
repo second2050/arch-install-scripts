@@ -25,6 +25,3 @@ timeout 5
 extra_kernel_version_strings linux-xanmod,linux-zen,linux-lts,linux
 write_systemd_vars true
 EOF
-
-# finish
-echo "Script is finished!"

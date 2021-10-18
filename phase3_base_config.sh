@@ -109,7 +109,3 @@ cat <<EOF >> /etc/sudoers.d/second2050
 %wheel ALL=(ALL) ALL
 Defaults pwfeedback
 EOF
-
-# finish
-echo "Script is finished!"
-echo "INFO: Don't forget to install a bootloader/-manager."

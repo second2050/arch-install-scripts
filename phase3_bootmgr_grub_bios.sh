@@ -13,6 +13,3 @@ grub-install --target=i386-pc /dev/$_device
 # generate grub config
 echo "INFO: Generating grub config..."
 grub-mkconfig -o /boot/grub/grub.cfg
-
-# finish
-echo "Script is finished!"
