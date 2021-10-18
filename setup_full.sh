@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # second2050 arch install script - FULL execution
 if [[ $1 == "phase3" ]]; then
+    # this will be run in the chroot
     /root/arch_install_scripts/phase3_base_config.sh
     if [[ $2 != "" ]]; then
         /root/arch_install_scripts/phase3_"$2".sh
@@ -15,9 +16,57 @@ if [[ $1 == "phase3" ]]; then
     esac
     exit
 else
+    # start of the script
+    _parttoollist=("Yes (UEFI/GPT)" "Yes (BIOS/MBR)" "No")
     _bootmgrlist=("none" "UEFI (rEFInd)" "BIOS (GRUB)")
     _gpulist=("none" "nvidia")
     _delist=("none" "KDE")
+
+    clear
+    echo "### second2050's arch install script ###"
+    PS3="Do you want to partition a drive?"
+    select _bootmgrselection in "${_parttoollist[@]}"; do
+        case $_bootmgrselection in
+            "Yes (UEFI/GPT)")
+                lsblk -do NAME,FSTYPE,SIZE
+                read -p "Which drive? " -i "/dev/" _drive
+                gdisk $_drive
+                _uefi=1
+                _parted=1
+                break;;
+            "Yes (BIOS/MBR)")
+                lsblk -do NAME,FSTYPE,SIZE
+                read -p "Which drive? " -i "/dev/" _drive
+                fdisk $_drive
+                _parted=1
+                break;;
+            "No")
+                break;;
+        esac
+    done
+
+    echo ""
+    PS3="Do you want to format your root?"
+    select _formatselection in "Yes" "No"; do
+        case $_formatselection in
+            "Yes")
+                echo "Formatting..."
+                lsblk -o NAME,FSTYPE,SIZE
+                read -p "Which partition? " -i "/dev/" _partition
+                ./phase1_format_btrfs.sh $_partition
+                break;;
+            "No")
+                echo "Mounting new root..."
+                read -p "Which partition? " -i "/dev/" _partition
+                mount $_partition /mnt
+                _mount=$?
+                if [[ $_mount != 0 ]]; then
+                    echo "ERROR: mount error $_mount"
+                    exit $_mount
+                fi
+                break;;
+        esac
+    done
 
     echo ""
     PS3="Which boot manager?"
