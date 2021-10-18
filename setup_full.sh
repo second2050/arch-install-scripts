@@ -69,6 +69,33 @@ else
     done
 
     echo ""
+    PS3="Do you want to mount something else?"
+    select _formatselection in "Yes" "No" "Shell"; do
+        case $_formatselection in
+            "No")
+                break;;
+            "Yes")
+                lsblk -o NAME,FSTYPE,SIZE
+                read -p "Which partition? " -i "/dev/" _partition
+                mount $_partition /mnt
+                _mount=$?
+                if [[ $_mount != 0 ]]; then
+                    echo "ERROR: mount error $_mount"
+                else
+                    echo "Mounted $_partition"
+                fi
+                echo ""
+                ;;
+            "Shell")
+                echo "Do your thing and type 'exit' to come back to this script."
+                zsh
+                echo ""
+                echo "Welcome back!"
+                ;;
+        esac
+    done
+
+    echo ""
     PS3="Which boot manager?"
     select _bootmgrselection in "${_bootmgrlist[@]}"; do
         case $_bootmgrselection in
