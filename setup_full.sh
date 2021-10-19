@@ -260,6 +260,9 @@ fi
 # remove /etc/resolv.conf in new root because I can't seem to symlink systemd-resolved's stub correctly otherwise...
 rm /mnt/etc/resolv.conf
 
+# generate fstab
+genfstab -U /mnt >> /mnt/etc/fstab
+
 # switching to arch-chroot to continue with the setup
 mkdir -p /mnt/root/arch_install_scripts
 cp -r . /mnt/root/arch_install_scripts
