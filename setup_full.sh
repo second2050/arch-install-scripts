@@ -1,158 +1,267 @@
 #!/usr/bin/env bash
-# second2050 arch install script - FULL execution
-if [[ $1 == "phase3" ]]; then
-    # this will be run in the chroot
-    /root/arch_install_scripts/phase3_base_config.sh
-    if [[ $2 != "" ]]; then
-        /root/arch_install_scripts/phase3_"$2".sh
-    fi
-    case $3 in
-        "nvidia")
-            /root/arch_install_scripts/phase3_nvidia.sh
-    esac
-    case $4 in
-        "kde")
-            /root/arch_install_scripts/phase4_kde.sh
-    esac
-    exit
-else
-    # start of the script
-    _parttoollist=("Yes (UEFI/GPT)" "Yes (BIOS/MBR)" "No")
-    _bootmgrlist=("none" "UEFI (rEFInd)" "BIOS (GRUB)")
-    _gpulist=("none" "nvidia")
-    _delist=("none" "KDE")
+# second2050 arch install script - FULL execution with TUI
 
+# Define the dialog exit status codes
+: "${DIALOG_OK=0}"
+: "${DIALOG_CANCEL=1}"
+: "${DIALOG_HELP=2}"
+: "${DIALOG_EXTRA=3}"
+: "${DIALOG_ITEM_HELP=4}"
+: "${DIALOG_ESC=255}"
+
+# get output from selections in dialog
+exec 3>&1
+
+# helper functions
+display_result() {
+  dialog --title "$1" --backtitle "second2050's arch installer - $2"\
+    --no-collapse \
+    --msgbox "$result" 0 0
+}
+
+# Info section 
+dialog --title "second2050's arch installer" --backtitle "second2050's arch installer" --clear \
+    --msgbox "This Installer will guide you through the ArchLinux install process. It will also get you started with my personal defaults." 0 0
+
+dialog --title "second2050's arch installer" --backtitle "second2050's arch installer" --clear \
+    --msgbox "The setup consists of: \n
+    1. Partitioning and formatting your drive \n
+    2. Installing the base system via pacstrap \n
+    3. Configurating your new install \n
+    4. Installing a bootloader/-manager \n
+    5. Installing a desktop environment" 0 0
+
+dialog --title "second2050's arch installer" --backtitle "second2050's arch installer" --clear \
+    --yesno "Are you sure you want to install ArchLinux now?" 0 0
+
+if [[ $? != $DIALOG_OK ]]; then
     clear
-    echo "### second2050's arch install script ###"
-    PS3="Do you want to partition a drive?"
-    select _bootmgrselection in "${_parttoollist[@]}"; do
-        case $_bootmgrselection in
-            "Yes (UEFI/GPT)")
-                lsblk -do NAME,FSTYPE,SIZE
-                read -p "Which drive? " -i "/dev/" _drive
-                gdisk $_drive
-                _uefi=1
-                _parted=1
-                break;;
-            "Yes (BIOS/MBR)")
-                lsblk -do NAME,FSTYPE,SIZE
-                read -p "Which drive? " -i "/dev/" _drive
-                fdisk $_drive
-                _parted=1
-                break;;
-            "No")
-                break;;
-        esac
-    done
+    exit
+fi
 
-    echo ""
-    PS3="Do you want to format your root?"
-    select _formatselection in "Yes" "No"; do
-        case $_formatselection in
-            "Yes")
-                echo "Formatting..."
-                lsblk -o NAME,FSTYPE,SIZE
-                read -p "Which partition? " -i "/dev/" _partition
-                ./phase1_format_btrfs.sh $_partition
-                break;;
-            "No")
-                echo "Mounting new root..."
-                read -p "Which partition? " -i "/dev/" _partition
-                mount $_partition /mnt
-                _mount=$?
-                if [[ $_mount != 0 ]]; then
-                    echo "ERROR: mount error $_mount"
-                    exit $_mount
-                fi
-                break;;
-        esac
-    done
+# Partitioning section
+while true; do
+    selection=$(dialog --title "Partitioning Menu" --backtitle "second2050's arch installer - Partitioning" --clear \
+        --menu "" 0 0 4 \
+        "1" "Display available devices and partitions" \
+        "2" "Partition device with 'gdisk' (GPT)" \
+        "3" "Partition device with 'fdisk' (MBR)" \
+        "0" "Finish partitioning" 2>&1 1>&3)
+    case $? in
+    $DIALOG_CANCEL)
+      clear
+      echo "Program terminated."
+      exit
+      ;;
+    $DIALOG_ESC)
+      clear
+      echo "Program aborted." >&2
+      exit 1
+      ;;
+    esac
+    case $selection in
+        1 )
+            result=$(lsblk -o NAME,MODEL,FSTYPE,SIZE)
+            display_result "Current Partitions and Devices" "Partitioning"
+            ;;
+        2 )
+            drivepath=$(dialog --title "Enter drive path - gdisk" --backtitle "second2050's arch installer - Partitioning" --clear \
+                --no-collapse --inputbox "$(lsblk -do PATH,MODEL,SIZE)" 0 0 "/dev/" 2>&1 1>&3)
+            case $? in
+                $DIALOG_CANCEL)
+                ;&
+                $DIALOG_ESC)
+                ;;
+                $DIALOG_OK)
+                gdisk "$drivepath"
+                ;;
+            esac
+            ;;
+        3 )
+            drivepath=$(dialog --title "Enter drive path - fdisk" --backtitle "second2050's arch installer - Partitioning" --clear \
+                --no-collapse --inputbox "$(lsblk -do PATH,MODEL,SIZE)" 0 0 "/dev/" 2>&1 1>&3)
+            case $? in
+                $DIALOG_CANCEL)
+                ;&
+                $DIALOG_ESC)
+                ;;
+                $DIALOG_OK)
+                fdisk "$drivepath"
+                ;;
+            esac
+            ;;
+        0 )
+            break;;
+    esac
+done
 
-    echo ""
-    PS3="Do you want to mount the ESP?"
-    select _formatselection in "Yes" "No" "Shell"; do
-        case $_formatselection in
-            "No")
-                break;;
-            "Yes")
-                lsblk -o NAME,FSTYPE,SIZE
-                read -p "Which partition? " -i "/dev/" _partition
-                mkdir /mnt/efi
-                mount $_partition /mnt/efi
-                _mount=$?
-                if [[ $_mount != 0 ]]; then
-                    echo "ERROR: mount error $_mount"
-                else
-                    echo "Mounted $_partition"
-                fi
-                echo ""
-                break;;
-            "Shell")
-                echo "Do your thing and type 'exit' to come back to this script."
-                zsh
-                echo ""
-                echo "Welcome back!"
-        esac
-    done
+# Formatting menu
+while true; do
+    selection=$(dialog --title "Formatting Menu" --backtitle "second2050's arch installer - Formatting" --clear \
+        --menu "" 0 0 6 \
+        "1" "Display available devices and partitions" \
+        "2" "Format root as btrfs" \
+        "3" "Format ESP" \
+        "4" "Mount ESP" \
+        "5" "Manual formatting/mounting (drops to shell)" \
+        "0" "Finish formatting and mounting" 2>&1 1>&3)
+    case $? in
+    $DIALOG_CANCEL)
+      clear
+      echo "Program terminated."
+      exit
+      ;;
+    $DIALOG_ESC)
+      clear
+      echo "Program aborted." >&2
+      exit 1
+      ;;
+    esac
+    case $selection in
+        1 )
+            result=$(lsblk -o NAME,MODEL,FSTYPE,SIZE)
+            display_result "Current Partitions and Devices" "Formatting"
+            ;;
+        2 )
+            rootpath=$(dialog --title "Format root as btrfs - Enter drive path" --backtitle "second2050's arch installer - Formatting" --clear \
+                --no-collapse --inputbox "$(lsblk -o NAME,MODEL,FSTYPE,SIZE)" 0 0 "/dev/" 2>&1 1>&3)
+            case $? in
+                $DIALOG_CANCEL)
+                ;&
+                $DIALOG_ESC)
+                ;;
+                $DIALOG_OK)
+                bash ./phase1_format_btrfs.sh "$rootpath" | dialog --title "Format root as btrfs" --backtitle "second2050's arch installer - Formatting" \
+                    --programbox 30 100
+                ;;
+            esac
+            ;;
+        3 )
+            #bash ./phase1_format_esp.sh
+            result="Not yet implemented"
+            display_result "Format ESP" "Formatting"
+            ;;
+        4 )
+            esppath=$(dialog --title "Enter drive path - Mount ESP" --backtitle "second2050's arch installer - Formatting" --clear \
+                --no-collapse --inputbox "$(lsblk -o NAME,MODEL,FSTYPE,SIZE)" 0 0 "/dev/" 2>&1 1>&3)
+            case $? in
+                $DIALOG_CANCEL)
+                ;&
+                $DIALOG_ESC)
+                ;;
+                $DIALOG_OK)
+                mount $esppath
+                ;;
+            esac
+            ;;
+        5 )
+            clear
+            echo "type 'exit' to go back to the setup."
+            zsh
+            ;;
+        0 )
+            break;;
+    esac
+done
 
-    echo ""
-    PS3="Which boot manager?"
-    select _bootmgrselection in "${_bootmgrlist[@]}"; do
-        case $_bootmgrselection in
-            "none")
-                _bootmgr=""
-                break;;
-            "UEFI (rEFInd)")
-                _bootmgr="bootmgr_refind"
-                break;;
-            "BIOS (GRUB)")
-                _bootmgr="bootmgr_grub_bios"
-                break;;
-        esac
-    done
+# Installing the base system with pacstrap
+basepkgs="base base-devel vim man-db linux-firmware networkmanager iwd sudo fish"
+fontpkgs="noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-cascadia-code"
 
-    echo ""
-    PS3="Which display driver?"
-    select _gpulistselection in "${_gpulist[@]}"; do
-        case $_gpulistselection in
-            "none")
-                _gpu=""
-                break;;
-            "Nvidia")
-                _gpu="nvidia"
-                break;;
-        esac
-    done
+# choose kernel
+selection=$(dialog --title "Choose kernel package" --backtitle "second2050's arch installer - Packages" --clear \
+    --radiolist "Press 'space' to select then press 'enter' to confirm." 0 0 3 \
+    "1" "Vanilla" on \
+    "2" "Zen Kernel" off \
+    "3" "LTS Kernel" off 2>&1 1>&3)
+case $? in
+    $DIALOG_CANCEL)
+        clear
+        echo "Program terminated."
+        exit
+        ;;
+    $DIALOG_ESC)
+        clear
+        echo "Program aborted." >&2
+        exit 1
+        ;;
+esac
+case $selection in
+    1 )
+        kernelpkgs="linux linux-headers"
+        ;;
+    2 ) 
+        kernelpkgs="linux-zen linux-zen-headers"
+        ;;
+    3 )
+        kernelpkgs="linux-lts linux-lts-headers"
+        ;;
+esac
 
-    echo ""
-    PS3="Which desktop environment?"
-    select _delistselection in "${_delist[@]}"; do
-        case $_delistselection in
-            "none")
-                _de=""
-                break;;
-            "KDE")
-                _de="kde"
-                break;;
-        esac
-    done
+# choose video drivers
+selection=$(dialog --title "Choose video driver" --backtitle "second2050's arch installer - Packages" --clear \
+    --radiolist "Press 'space' to select then press 'enter' to confirm." 0 0 7 \
+    "1" "None" on \
+    "2" "AMD (GCN 3 and higher)" off \
+    "3" "ATI (GCN 2 and lower)" off \
+    "4" "Intel" off \
+    "5" "NVIDIA (Nouveau)" off \
+    "6" "NVIDIA (Proprietary)" off 2>&1 1>&3)
+case $? in
+    $DIALOG_CANCEL)
+        clear
+        echo "Program terminated."
+        exit
+        ;;
+    $DIALOG_ESC)
+        clear
+        echo "Program aborted." >&2
+        exit 1
+        ;;
+esac
+case $selection in
+    1 )
+        videopkgs=""
+        ;;
+    2 )
+        videopkgs="xf86-video-amdgpu mesa"
+        ;;
+    3 )
+        videopkgs="xf86-video-ati mesa"
+        ;;
+    4 )
+        videopkgs="xf86-video-intel mesa"
+        ;;
+    5 )
+        videopkgs="xf86-video-nouveau mesa"
+        ;;
+    6 )
+        videopkgs="nvidia-dkms nvidia-utils"
+        ;;
+esac
 
-    echo ""
-    echo "THIS WILL START THE INSTALLATION OF ARCH"
-    echo "ARE YOU SURE YOU WANT TO DO THIS?"
-    echo "THIS WILL RUN ALL SCRIPTS BACK-TO-BACK!"
-    echo ""
-    read -t 10 -p "[YES/no]: " _doit
-    if [[ $_doit != "YES" ]]; then
-    	echo "User aborted."
-    	exit
-    fi
+# actually install packages
+pacstrap /mnt $basepkgs $kernelpkgs $fontpkgs $videopkgs | dialog --title "Installing..." --backtitle "second2050's arch installer - Installation" --progressbox -1 -1
+_pacstrapexit=${PIPESTATUS[0]}
+if [[ $_pacstrapexit != 0 ]]; then
+    result="'pacstrap' exited with $_pacstrapexit \nSetup will be aborted..."
+    display_result "ERROR" "Installing"
+    exit $_pacstrapexit
+fi
 
+# remove /etc/resolv.conf in new root because I can't seem to symlink systemd-resolved's stub correctly otherwise...
+rm /mnt/etc/resolv.conf
 
-    # Execution!
-    bash phase2_base_install.sh
-    mkdir -p /mnt/root/arch_install_scripts
-    cp -r . /mnt/root/arch_install_scripts
-    arch-chroot /mnt /root/arch_install_scripts/"$0" phase3 $_bootmgr $_gpu $_de
-fi;
+# switching to arch-chroot to continue with the setup
+mkdir -p /mnt/root/arch_install_scripts
+cp -r . /mnt/root/arch_install_scripts
+arch-chroot /mnt /root/arch_install_scripts/setup_full_chroot.sh
 
+# when chroot is finished greet user
+if [[ $? != 0 ]]; then
+    dialog --title "second2050's arch installer" --backtitle "second2050's arch installer" --clear \
+        --msgbox "Something went wrong, the base system was installed but the second part of the script exited without finishing." 0 0
+else
+    dialog --title "second2050's arch installer" --backtitle "second2050's arch installer" --clear \
+        --msgbox "The Setup is finished and you should have a working ArchLinux install now." 0 0
+fi
