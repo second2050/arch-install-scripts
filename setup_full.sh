@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # second2050 arch install script - FULL execution with TUI
 
+# ensure dialog is installed
+if [[ ! -f /bin/dialog ]]; then
+    pacman -Sy dialog
+fi
+
 # Define the dialog exit status codes
 : "${DIALOG_OK=0}"
 : "${DIALOG_CANCEL=1}"
@@ -168,6 +173,7 @@ done
 # Installing the base system with pacstrap
 basepkgs="base base-devel vim man-db linux-firmware networkmanager iwd sudo fish"
 fontpkgs="noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-cascadia-code"
+scriptpkgs="dialog"
 
 # choose kernel
 selection=$(dialog --title "Choose kernel package" --backtitle "second2050's arch installer - Packages" --clear \
@@ -242,7 +248,7 @@ case $selection in
 esac
 
 # actually install packages
-pacstrap /mnt $basepkgs $kernelpkgs $fontpkgs $videopkgs | dialog --title "Installing..." --backtitle "second2050's arch installer - Installation" --progressbox -1 -1
+pacstrap /mnt $basepkgs $kernelpkgs $fontpkgs $scriptpkgs $videopkgs | dialog --title "Installing..." --backtitle "second2050's arch installer - Installation" --progressbox -1 -1
 _pacstrapexit=${PIPESTATUS[0]}
 if [[ $_pacstrapexit != 0 ]]; then
     result="'pacstrap' exited with $_pacstrapexit \nSetup will be aborted..."
