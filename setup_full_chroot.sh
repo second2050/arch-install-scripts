@@ -296,7 +296,8 @@ case $selection in
     1 )
         ;;
     2 )
-        /root/arch_install_scripts/phase4_kde.sh | dialog --title "Installing KDE Plasma" --backtitle "second2050's arch installer - Configuration" --progressbox 30 100
+        # running in a progressbox results in... something not good
+        /root/arch_install_scripts/phase4_kde.sh #| dialog --title "Installing KDE Plasma" --backtitle "second2050's arch installer - Configuration" --progressbox 30 100
         ;;
 esac
 
