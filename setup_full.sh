@@ -248,8 +248,9 @@ case $selection in
 esac
 
 # actually install packages
-pacstrap /mnt $basepkgs $kernelpkgs $fontpkgs $scriptpkgs $videopkgs | dialog --title "Installing..." --backtitle "second2050's arch installer - Installation" --progressbox -1 -1
-_pacstrapexit=${PIPESTATUS[0]}
+clear
+pacstrap /mnt $basepkgs $kernelpkgs $fontpkgs $scriptpkgs $videopkgs
+_pacstrapexit=$?
 if [[ $_pacstrapexit != 0 ]]; then
     result="'pacstrap' exited with $_pacstrapexit \nSetup will be aborted..."
     display_result "ERROR" "Installing"
