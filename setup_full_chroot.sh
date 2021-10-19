@@ -281,7 +281,6 @@ EOF
 selection=$(dialog --title "Choose a bootloader/-manager" --backtitle "second2050's arch installer - Configuration" --clear \
     --radiolist "Press 'space' to select then press 'enter' to confirm." 0 0 3 \
     "1" "UEFI: rEFInd" on \
-    \ #"2" "UEFI: GRUB" off \
     "3" "BIOS: GRUB" off 2>&1 1>&3)
 case $? in
     $DIALOG_CANCEL)
