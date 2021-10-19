@@ -136,8 +136,8 @@ while true; do
                 $DIALOG_ESC)
                 ;;
                 $DIALOG_OK)
-                bash ./phase1_format_btrfs.sh "$rootpath" | dialog --title "Format root as btrfs" --backtitle "second2050's arch installer - Formatting" \
-                    --programbox 30 100
+                clear
+                bash ./phase1_format_btrfs.sh "$rootpath"
                 ;;
             esac
             ;;
