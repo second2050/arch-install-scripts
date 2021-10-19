@@ -192,7 +192,8 @@ sed -i "/Color/s/^#//g" /etc/pacman.conf
 sed -i "/ParallelDownloads/s/^#//g" /etc/pacman.conf
 
 # recreate initramfs
-mkinitcpio -P | dialog --title "Creating initramfs..." --backtitle "second2050's arch installer - Configuration" --progressbox -1 -1
+dialog --clear --title "Creating initramfs..." --backtitle "second2050's arch installer - Configuration" --infobox -1 -1
+mkinitcpio -P > /dev/null
 
 # set root password
 while true; do
@@ -214,7 +215,7 @@ while true; do
         break
     fi
 done
-chpasswd < "root:$rootpw"
+echo "root:$rootpw" | chpasswd
 
 # create user account
 while true; do
@@ -258,7 +259,7 @@ while true; do
         break
     fi
 done
-chpasswd < "$username:$userpw"
+echo "$username:$userpw"
 
 # set fish as user shell via chainloading from bash
 cat <<EOF >> /home/$username/.bashrc
@@ -305,3 +306,4 @@ case $selection in
         /root/arch_install_scripts/phase3_bootmgr_grub_bios.sh | dialog --title "Installing GRUB (BIOS)" --backtitle "second2050's arch installer - Configuration" --progressbox 30 100
         ;;
 esac
+clear
