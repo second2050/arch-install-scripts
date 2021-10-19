@@ -150,7 +150,8 @@ while true; do
                 $DIALOG_ESC)
                 ;;
                 $DIALOG_OK)
-                mount $esppath
+                mkdir -p /mnt/efi
+                mount $esppath /mnt/efi
                 ;;
             esac
             ;;
