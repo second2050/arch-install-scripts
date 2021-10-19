@@ -192,7 +192,7 @@ sed -i "/Color/s/^#//g" /etc/pacman.conf
 sed -i "/ParallelDownloads/s/^#//g" /etc/pacman.conf
 
 # recreate initramfs
-dialog --clear --title "Creating initramfs..." --backtitle "second2050's arch installer - Configuration" --infobox -1 -1
+dialog --title "Creating initramfs..." --backtitle "second2050's arch installer - Configuration" --infobox "please wait..." 0 0
 mkinitcpio -P > /dev/null
 
 # set root password
@@ -276,6 +276,29 @@ cat <<EOF >> /etc/sudoers.d/second2050
 %wheel ALL=(ALL) ALL
 Defaults pwfeedback
 EOF
+
+# install desktop environment
+selection=$(dialog --title "Choose a Desktop Environment" --backtitle "second2050's arch installer - Configuration" --clear \
+    --radiolist "Press 'space' to select then press 'enter' to confirm." 0 0 3 \
+    "1" "None" on \
+    "2" "KDE Plasma" off 2>&1 1>&3)
+case $? in
+    $DIALOG_CANCEL)
+        selection=1
+        ;;
+    $DIALOG_ESC)
+        clear
+        echo "Program aborted." >&2
+        exit 1
+        ;;
+esac
+case $selection in
+    1 )
+        ;;
+    2 )
+        /root/arch_install_scripts/phase4_kde.sh | dialog --title "Installing KDE Plasma" --backtitle "second2050's arch installer - Configuration" --progressbox 30 100
+        ;;
+esac
 
 # setup a bootloader
 selection=$(dialog --title "Choose a bootloader/-manager" --backtitle "second2050's arch installer - Configuration" --clear \
