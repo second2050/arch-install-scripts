@@ -32,6 +32,11 @@ fi
 # commence the great purge
 echo "INFO: Formatting..."
 mkfs.btrfs $_partition -f
+if [[ $? != 0 ]]; then
+	echo "ERROR: formatting failed"
+	echo "is the device still mounted?"
+	exit 1
+fi
 
 # mount and create subvolumes
 echo "INFO: Creating subvolume layout..."
