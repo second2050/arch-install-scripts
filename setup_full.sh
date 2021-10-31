@@ -171,7 +171,7 @@ while true; do
 done
 
 # Installing the base system with pacstrap
-basepkgs="base base-devel vim man-db linux-firmware networkmanager iwd sudo fish"
+basepkgs="base base-devel vim man-db linux-firmware networkmanager iwd sudo fish btrfs-progs"
 fontpkgs="noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-cascadia-code"
 scriptpkgs="dialog"
 
