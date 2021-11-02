@@ -153,9 +153,9 @@ while true; do
 done
 echo "$hostname" > /etc/hostname
 cat <<EOF >> /etc/hosts 
-echo "127.0.0.1    localhost"
-echo "::1          localhost"
-echo "127.0.1.1    $hostname"
+127.0.0.1    localhost
+::1          localhost
+127.0.1.1    $hostname
 EOF
 
 # setup networking
