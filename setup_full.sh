@@ -3,7 +3,7 @@
 
 # ensure dialog is installed
 if [[ ! -f /bin/dialog ]]; then
-    pacman -Sy dialog
+    pacman -Sy dialog ncurses bash
 fi
 
 # Define the dialog exit status codes
