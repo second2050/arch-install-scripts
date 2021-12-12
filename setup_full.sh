@@ -66,12 +66,12 @@ while true; do
     esac
     case $selection in
         1 )
-            result=$(lsblk -o NAME,MODEL,FSTYPE,SIZE)
+            result=$(lsblk -o PATH,MODEL,FSTYPE,SIZE | grep --color=never -E "sd|vd|nvme|PATH")
             display_result "Current Partitions and Devices" "Partitioning"
             ;;
         2 )
             drivepath=$(dialog --title "Enter drive path - gdisk" --backtitle "second2050's arch installer - Partitioning" --clear \
-                --no-collapse --inputbox "$(lsblk -do PATH,MODEL,SIZE)" 0 0 "/dev/" 2>&1 1>&3)
+                --no-collapse --inputbox "$(lsblk -do PATH,MODEL,SIZE | grep --color=never -E "sd|vd|nvme|PATH")" 0 0 "/dev/" 2>&1 1>&3)
             case $? in
                 $DIALOG_CANCEL)
                 ;&
@@ -84,7 +84,7 @@ while true; do
             ;;
         3 )
             drivepath=$(dialog --title "Enter drive path - fdisk" --backtitle "second2050's arch installer - Partitioning" --clear \
-                --no-collapse --inputbox "$(lsblk -do PATH,MODEL,SIZE)" 0 0 "/dev/" 2>&1 1>&3)
+                --no-collapse --inputbox "$(lsblk -do PATH,MODEL,SIZE | grep --color=never -E "sd|vd|nvme|PATH")" 0 0 "/dev/" 2>&1 1>&3)
             case $? in
                 $DIALOG_CANCEL)
                 ;&
@@ -124,12 +124,12 @@ while true; do
     esac
     case $selection in
         1 )
-            result=$(lsblk -o NAME,MODEL,FSTYPE,SIZE)
+            result=$(lsblk -o PATH,MODEL,FSTYPE,SIZE | grep --color=never -E "sd|vd|nvme|PATH")
             display_result "Current Partitions and Devices" "Formatting"
             ;;
         2 )
             rootpath=$(dialog --title "Format root as btrfs - Enter drive path" --backtitle "second2050's arch installer - Formatting" --clear \
-                --no-collapse --inputbox "$(lsblk -o NAME,MODEL,FSTYPE,SIZE)" 0 0 "/dev/" 2>&1 1>&3)
+                --no-collapse --inputbox "$(lsblk -o PATH,MODEL,FSTYPE,SIZE | grep --color=never -E "sd|vd|nvme|PATH")" 0 0 "/dev/" 2>&1 1>&3)
             case $? in
                 $DIALOG_CANCEL)
                 ;&
@@ -148,7 +148,7 @@ while true; do
             ;;
         4 )
             esppath=$(dialog --title "Enter drive path - Mount ESP" --backtitle "second2050's arch installer - Formatting" --clear \
-                --no-collapse --inputbox "$(lsblk -o NAME,MODEL,FSTYPE,SIZE)" 0 0 "/dev/" 2>&1 1>&3)
+                --no-collapse --inputbox "$(lsblk -o PATH,MODEL,FSTYPE,SIZE | grep --color=never -E "sd|vd|nvme|PATH")" 0 0 "/dev/" 2>&1 1>&3)
             case $? in
                 $DIALOG_CANCEL)
                 ;&
