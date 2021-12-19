@@ -43,9 +43,16 @@ user_username=""
 user_password=""
 system_kernel=""
 system_gpu=""
+fontpkgs=""
+videopkgs=""
+desktopenvpkgs=""
+bootloaderpkgs=""
 
 # load userconfig from part 1
-source userconfig.conf
+source /root/arch_install_script/userconfig.conf
+
+# install non-base packages
+pacman -S --noconfirm git $fontpkgs $videopkgs $desktopenvpkgs $bootloaderpkgs
 
 # timezone
 ln -sf "/usr/share/zoneinfo/$user_timezone" /etc/localtime

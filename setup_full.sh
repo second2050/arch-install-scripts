@@ -274,7 +274,7 @@ esac
 
 ## finally pacstrap
 dialog --backtitle "$backtitle" --no-cancel --pause "\n  Arch Linux will now be installed." 10 39 5
-pacstrap /mnt $basepkgs $system_kernel "$system_kernel"-headers $fontpkgs $scriptpkgs $videopkgs $desktopenvpkgs $bootloaderpkgs
+pacstrap /mnt $basepkgs $system_kernel "$system_kernel"-headers $scriptpkgs
 
 # remove /etc/resolv.conf in new root because I can't seem to symlink systemd-resolved's stub correctly otherwise...
 rm /mnt/etc/resolv.conf
@@ -291,6 +291,10 @@ genfstab -U /mnt >> /mnt/etc/fstab
     echo "user_username=\"$user_username\""
     echo "user_password=\"$user_password\""
     echo "system_kernel=\"$system_kernel\""
+    echo "fontpkgs=\"$fontpkgs\""
+    echo "videopkgs=\"$videopkgs\""
+    echo "desktopenvpkgs=\"$desktopenvpkgs\""
+    echo "bootloaderpkgs=\"$bootloaderpkgs\""
 ) > userconfig.conf
 
 # switching to arch-chroot to continue with the setup
