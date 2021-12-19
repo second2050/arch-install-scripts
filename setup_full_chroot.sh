@@ -49,7 +49,7 @@ desktopenvpkgs=""
 bootloaderpkgs=""
 
 # load userconfig from part 1
-source /root/arch_install_script/userconfig.conf
+source /root/arch_install_scripts/userconfig.conf
 
 # install non-base packages
 pacman -S --noconfirm git $fontpkgs $videopkgs $desktopenvpkgs $bootloaderpkgs
