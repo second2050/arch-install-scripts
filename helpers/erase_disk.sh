@@ -17,7 +17,7 @@ _device="/dev/$1"
 _btrfsmountoptions="rw,noatime,discard=async"
 
 # exit if device does not exist
-if [ -f $_partition ]; then 
+if [ -f $_device ]; then 
     dialog --title "ERROR" --backtitle "$backtitle" --clear \
         --msgbox "Device does not exist!" 0 0
     exit 1
