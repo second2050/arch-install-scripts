@@ -50,6 +50,7 @@ bootloaderpkgs=""
 
 # load userconfig from part 1
 source /root/arch_install_scripts/userconfig.conf
+rm /root/arch_install_scripts/userconfig.conf
 
 # configurating pacman
 sed -i "/Color/s/^#//g" /etc/pacman.conf
