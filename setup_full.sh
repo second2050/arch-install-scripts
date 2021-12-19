@@ -229,6 +229,7 @@ while true; do
         $DIALOG_ESC)
             display_abortion;;
     esac
+    if [[ $system_kernel != "" ]]; then break; fi
 done
 
 ## choose video drivers
