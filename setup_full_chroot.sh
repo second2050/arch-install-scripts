@@ -51,6 +51,10 @@ bootloaderpkgs=""
 # load userconfig from part 1
 source /root/arch_install_scripts/userconfig.conf
 
+# configurating pacman
+sed -i "/Color/s/^#//g" /etc/pacman.conf
+sed -i "/ParallelDownloads/s/^#//g" /etc/pacman.conf
+
 # install non-base packages
 pacman -S --noconfirm git $fontpkgs $videopkgs $desktopenvpkgs $bootloaderpkgs
 
@@ -99,10 +103,6 @@ MulticastDNS=yes
 Cache=yes
 EOF
 
-# configurating pacman
-sed -i "/Color/s/^#//g" /etc/pacman.conf
-sed -i "/ParallelDownloads/s/^#//g" /etc/pacman.conf
-
 # recreate initramfs, just to be safe
 mkinitcpio -P
 
@@ -111,7 +111,7 @@ useradd -m -G wheel -s /bin/bash $user_username
 echo "$user_username:$user_password" | chpasswd
 
 ## set fish as user shell via chainloading from bash
-cat <<EOF >> /home/$username/.bashrc
+cat <<EOF >> /home/$user_username/.bashrc
 # Execute fish if not run from fish itself
 if [ \$(ps -p \$PPID -o comm=) != "fish" ]; then
     exec fish
