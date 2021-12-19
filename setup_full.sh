@@ -87,7 +87,8 @@ while true; do
                 options+=("$device" "$name")
             done < <(lsblk -do NAME,MODEL,SIZE | grep -E "sd|vd|nvme")
             drive=$(dialog --title "Erase Disk" --backtitle "$backtitle" --menu "Select the drive on which Arch Linux should be installed:" 0 0 0 "${options[@]}" 2>&1 1>&3)
-            if [[ $(bash ./helpers/erase_disk.sh) == 0 ]]; then break; fi
+            bash ./helpers/erase_disk.sh $drive
+            if [[ $? == 0 ]]; then break; fi
             ;;
         "Manual") # TODO: Implement
             display_msg "Not Implemented" "Not Implemented"
@@ -144,7 +145,7 @@ done
 _autotz="$(curl --silent --fail https://ipapi.co/timezone)"
 while true; do
     user_timezone=$(dialog --title "Timezone" --backtitle "$backtitle" --clear --help-button --no-cancel \
-                    --no-collapse --inputbox "What Timezone are you in?" 0 0 "$autotz" 2>&1 1>&3)
+                    --no-collapse --inputbox "What Timezone are you in?" 0 0 "$_autotz" 2>&1 1>&3)
     case $? in
         $DIALOG_HELP)
             dialog --title "Available timezones" --backtitle "$backtitle" --clear \
@@ -186,7 +187,7 @@ while true; do
         $DIALOG_OK)
             ;;
     esac
-    if [[ $rootpw == "" ]]; then
+    if [[ $user_username == "" ]]; then
         dialog --title "User Account" --backtitle "second2050's arch installer - Configuration" --clear --no-cancel \
             --no-collapse --msgbox "A user account is needed and can't be skipped" 0 0
     else
@@ -207,7 +208,7 @@ while true; do
         $DIALOG_OK)
             ;;
     esac
-    if [[ $userpw == "" ]]; then
+    if [[ $user_password == "" ]]; then
         dialog --title "User Password" --backtitle "second2050's arch installer - Configuration" --clear --no-cancel \
             --no-collapse --msgbox "A password is needed and can't be skipped" 0 0
     else
