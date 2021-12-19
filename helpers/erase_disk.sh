@@ -45,7 +45,7 @@ sgdisk -n 0:0:0 -t 0:8300 -c 0:"Arch Linux" "$_device"
 
 # formatting
 mkfs.vfat "$_device"1 
-mkfs.btrfs "$_device"2 
+mkfs.btrfs -f "$_device"2 
 
 # mounting
 umount -R /mnt
