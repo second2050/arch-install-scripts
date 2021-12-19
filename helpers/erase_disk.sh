@@ -37,6 +37,8 @@ esac
 
 dialog --infobox "\n  Formatting disk, please wait..." 5 39
 (
+# unmount everything in /mnt
+umount -R /mnt
 # erasing and partitioning the drive
 wipefs -af "$_device" 
 sgdisk -Zo "$_device" 
