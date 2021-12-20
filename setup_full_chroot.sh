@@ -94,8 +94,9 @@ ConditionFirstBoot=yes
 ExecStart=/usr/bin/localectl set-keymap $user_keymap
 
 [Install]
-Wants=first-boot-complete.target
+WantedBy=multi-user.target
 EOF
+systemctl enable set-keymap-fb.service
 
 # networking
 ## hostname
