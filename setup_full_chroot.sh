@@ -83,8 +83,8 @@ LC_MEASUREMENT=$user_locale.UTF-8
 LC_IDENTIFICATION=$user_locale.UTF-8
 EOF
 
-# keyboard layout for vconsole
-echo "KEYMAP=$user_keymap" > /etc/vconsole.conf
+# set keyboard layout
+localectl set-keymap $user_keymap
 
 # networking
 ## hostname
