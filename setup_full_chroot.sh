@@ -84,7 +84,18 @@ LC_IDENTIFICATION=$user_locale.UTF-8
 EOF
 
 # set keyboard layout
-localectl set-keymap $user_keymap
+cat <<EOF > /etc/systemd/system/set-keymap-fb.service
+[Unit]
+Description=Set keyboard layout on first boot
+
+[Service]
+Type=oneshot
+ConditionFirstBoot=yes
+ExecStart=/usr/bin/localectl set-keymap $user_keymap
+
+[Install]
+Wants=first-boot-complete.target
+EOF
 
 # networking
 ## hostname
