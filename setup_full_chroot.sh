@@ -66,6 +66,21 @@ hwclock --systohc
 # locale
 sed -i "/en_US.UTF-8/s/^#//g" /etc/locale.gen
 sed -i "/$user_locale.UTF-8/s/^#//g" /etc/locale.gen
+cat <<EOF > /etc/locale.conf
+LANG=$user_locale.UTF-8
+LC_CTYPE=$user_locale.UTF-8
+LC_NUMERIC=$user_locale.UTF-8
+LC_TIME=$user_locale.UTF-8
+LC_COLLATE=$user_locale.UTF-8
+LC_MONETARY=$user_locale.UTF-8
+LC_MESSAGES=$user_locale.UTF-8
+LC_PAPER=$user_locale.UTF-8
+LC_NAME=$user_locale.UTF-8
+LC_ADDRESS=$user_locale.UTF-8
+LC_TELEPHONE=$user_locale.UTF-8
+LC_MEASUREMENT=$user_locale.UTF-8
+LC_IDENTIFICATION=$user_locale.UTF-8
+EOF
 
 # keyboard layout for vconsole
 echo "KEYMAP=$user_keymap" > /etc/vconsole.conf
