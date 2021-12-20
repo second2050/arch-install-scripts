@@ -30,6 +30,10 @@ dd if=./iso/usr/standalone/i386/boot0ss of="/dev/$_root_device" bs=440 count=1 c
 # copy legacy bootloader from clover
 cp ./iso/usr/standalone/i386/x64/boot6 /efi/boot
 
+# copy over clover
+cp ./iso/EFI/BOOT /efi/EFI/BOOT
+cp ./iso/EFI/CLOVER /efi/EFI/CLOVER
+
 # configure it to chainload refind
 cat <<EOF > /efi/EFI/CLOVER/config.plist
 <?xml version="1.0" encoding="UTF-8"?>
