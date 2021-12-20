@@ -11,7 +11,8 @@ cd /tmp/$0 || exit
 
 # download the iso if not already done so
 if [[ ! -f ./CloverISO-$clover_version.tar.lzma ]]; then
-    curl https://github.com/CloverHackyColor/CloverBootloader/releases/download/$clover_version/CloverISO-$clover_version.tar.lzma > CloverISO-$clover_version.tar.lzma
+    if [[ ! -f /usr/bin/wget ]]; then pacman -S --noconfirm wget; fi
+    wget https://github.com/CloverHackyColor/CloverBootloader/releases/download/$clover_version/CloverISO-$clover_version.tar.lzma
     tar --lzma -xvf CloverISO-$clover_version.tar.lzma
 fi
 
