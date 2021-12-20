@@ -176,6 +176,14 @@ _uuid=$(lsblk -no UUID $(df -P / | awk 'END{print $1}'))
     echo "\"Boot to terminal\"             \"root=UUID=$_uuid rw initrd=boot\initramfs-%v.img loglevel=3 rd.udev.log_priority=3 systemd.unit=multi-user.target\""
 } > /boot/refind_linux.conf
 
+## copy refind to the correct place if installed on bios systems
+if [[ ! -f /sys/firmware/efi/efivars ]]; then
+    if [[ ! -f /efi/EFI/refind ]]; then
+        mv /efi/EFI/BOOT /efi/EFI/refind
+        mv /efi/EFI/refind/bootx64.efi /efi/EFI/refind/refind_x64.efi
+    fi
+fi
+
 ## download better looking theme
 ## refind-theme-regular by bobafetthotmail
 {
