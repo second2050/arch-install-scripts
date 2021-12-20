@@ -101,9 +101,9 @@ while true; do
         "0" "Finish paritioning"
     case $? in
         $DIALOG_CANCEL)
-            display_abortion;;
+            exit 1;;
         $DIALOG_ESC)
-            display_abortion;;
+            exit 1;;
     esac
     case $selection in
         1)
