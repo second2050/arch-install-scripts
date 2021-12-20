@@ -4,6 +4,7 @@
 _root_device=$1 # like "vda"
 _esp_part=$2    # like "1"
 clover_version=5142
+wd="/tmp/clover-install"
 
 # switch to a temp directory
 mkdir -p "/tmp/$0"
@@ -31,8 +32,8 @@ dd if=./iso/usr/standalone/i386/boot0ss of="/dev/$_root_device" bs=440 count=1 c
 cp ./iso/usr/standalone/i386/x64/boot6 /efi/boot
 
 # copy over clover
-cp ./iso/EFI/BOOT /efi/EFI/BOOT
-cp ./iso/EFI/CLOVER /efi/EFI/CLOVER
+cp -R ./iso/efi/boot /efi/EFI/BOOT
+cp -R ./iso/efi/clover /efi/EFI/CLOVER
 
 # configure it to chainload refind
 cat <<EOF > /efi/EFI/CLOVER/config.plist
