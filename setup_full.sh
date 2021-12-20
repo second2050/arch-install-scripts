@@ -91,8 +91,13 @@ while true; do
             if [[ $? == 0 ]]; then break; fi
             ;;
         "Manual") # TODO: Implement
-            display_msg "Not Implemented" "Not Implemented"
-            break
+            unset options
+            while read -r device name; do # read all HDDs and SSDs into a list
+                options+=("$device" "$name")
+            done < <(lsblk -do NAME,MODEL,SIZE | grep -E "sd|vd|nvme")
+            drive=$(dialog --title "Erase Disk" --backtitle "$backtitle" --menu "Select the drive on which Arch Linux should be installed:" 0 0 0 "${options[@]}" 2>&1 1>&3)
+            bash ./helpers/part_disk.sh $drive
+            if [[ $? == 0 ]]; then break; fi
             ;;
     esac
 done
