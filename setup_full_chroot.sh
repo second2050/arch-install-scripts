@@ -66,6 +66,7 @@ hwclock --systohc
 # locale
 sed -i "/en_US.UTF-8/s/^#//g" /etc/locale.gen
 sed -i "/$user_locale.UTF-8/s/^#//g" /etc/locale.gen
+locale-gen
 cat <<EOF > /etc/locale.conf
 LANG=$user_locale.UTF-8
 LC_CTYPE=$user_locale.UTF-8
