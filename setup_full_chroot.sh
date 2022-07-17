@@ -112,10 +112,6 @@ systemctl enable systemd-resolved
 ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 ## write NetworkManager config
 mkdir -p /etc/NetworkManager/conf.d
-cat <<EOF > /etc/NetworkManager/conf.d/wifi_backend.conf
-[device]
-wifi.backend=iwd
-EOF
 cat <<EOF > /etc/NetworkManager/conf.d/mdns.conf
 [connection]
 connection.mdns=2 # enable mdns resolution and registering/broadcasting

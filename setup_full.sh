@@ -51,7 +51,7 @@ system_gpu=""
 
 # variables used for this script
 export backtitle="second2050's arch installer"
-basepkgs="base base-devel vim man-db linux-firmware networkmanager iwd sudo fish btrfs-progs"
+basepkgs="base base-devel vim man-db linux-firmware networkmanager sudo fish btrfs-progs"
 fontpkgs="noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra ttf-cascadia-code"
 scriptpkgs="dialog"
 desktopenvpkgs="plasma-meta sddm kde-applications plasma-wayland-session"

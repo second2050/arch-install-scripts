@@ -6,7 +6,7 @@ This script will interactively guide you through your Arch Linux installation, w
   - Enabled colored output
   - Enabled parallel downloads
 - Networking
-  - Using NetworkManager + iwd + systemd-resolved
+  - Using NetworkManager + systemd-resolved
   - Cloudflare DNS (`1.1.1.1`) as default DNS server with DNSSEC + DNSoverTLS
 - Graphical Environment
   - Desktop Environment: KDE Plasma 5
