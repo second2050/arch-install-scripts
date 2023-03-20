@@ -107,7 +107,6 @@ cat <<EOF >> /etc/hosts
 127.0.1.1    $user_hostname
 EOF
 systemctl enable NetworkManager
-systemctl enable iwd
 systemctl enable systemd-resolved
 ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 ## write NetworkManager config
@@ -120,10 +119,11 @@ EOF
 cat <<EOF >> /etc/systemd/resolved.conf
 
 # second2050's resolved conf
-DNS=1.1.1.1
-FallbackDNS=1.0.0.1 9.9.9.9 9.9.9.10 8.8.8.8 2606:4700:4700::1111 2620:fe::10 2001:4860:4860::8888
-DNSSEC=yes
-DNSOverTLS=yes
+DNS=1.1.1.1#one.one.one.one 1.0.0.1 9.9.9.9 149.112.112.112 2606:4700:4700::1111 2606:4700:4700::1001 2620:fe::fe 2620:fe::9
+FallbackDNS=8.8.8.8 2001:4860:4860::8888
+Domains=~.
+DNSSEC=allow-downgrade
+DNSOverTLS=opportunistic
 MulticastDNS=yes
 Cache=yes
 EOF
