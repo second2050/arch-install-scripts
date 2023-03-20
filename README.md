@@ -14,7 +14,6 @@ This script will interactively guide you through your Arch Linux installation, w
     - using Breeze theme
 - User defaults:
   - 🐟 (`fish`) as default shell
-    - chainloaded with `bash` to ensure posix support for login scripts
 - Bootloader: rEFInd
   - using [refind-theme-regular by bobafetthotmail](https://github.com/bobafetthotmail/refind-theme-regular)
 

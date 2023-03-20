@@ -132,16 +132,8 @@ EOF
 mkinitcpio -P
 
 # create user
-useradd -m -G wheel -s /bin/bash $user_username
+useradd -m -G wheel -s /bin/fish $user_username
 echo "$user_username:$user_password" | chpasswd
-
-## set fish as user shell via chainloading from bash
-cat <<EOF >> /home/$user_username/.bashrc
-# Execute fish if not run from fish itself
-if [ \$(ps -p \$PPID -o comm=) != "fish" ]; then
-    exec fish
-fi
-EOF
 
 # setup sudo
 mkdir -p /etc/sudoers.d
