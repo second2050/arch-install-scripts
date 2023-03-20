@@ -294,7 +294,6 @@ genfstab -U /mnt >> /mnt/etc/fstab
     echo "user_keymap=\"$user_keymap\""
     echo "user_hostname=\"$user_hostname\""
     echo "user_username=\"$user_username\""
-    echo "user_password=\"$user_password\""
     echo "system_kernel=\"$system_kernel\""
     echo "fontpkgs=\"$fontpkgs\""
     echo "videopkgs=\"$videopkgs\""
@@ -305,4 +304,4 @@ genfstab -U /mnt >> /mnt/etc/fstab
 # switching to arch-chroot to continue with the setup
 mkdir -p /mnt/root/arch_install_scripts
 cp -r . /mnt/root/arch_install_scripts
-arch-chroot /mnt /root/arch_install_scripts/setup_full_chroot.sh
+arch-chroot /mnt /root/arch_install_scripts/setup_full_chroot.sh $user_password
